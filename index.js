@@ -30,6 +30,9 @@ async function run() {
     const database= client.db('carsHouse');
     const servicesCollection= database.collection('services')
 
+    const bookingDatabase= client.db('carsHouse');
+    const bookingCollection= bookingDatabase.collection('bookings')
+
     app.get('/services', async(req,res)=>{
         const cursor= servicesCollection.find();
         const result= await cursor.toArray();
@@ -50,6 +53,14 @@ async function run() {
         res.send(result)
     } )
 
+    //bookings
+    app.post('/bookings', async(req,res) =>{
+         const booking= req.body;
+        // console.log(booking);
+
+         const result= await bookingCollection.insertOne(booking);
+         res.send(result)
+    } )
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
