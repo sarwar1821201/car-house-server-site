@@ -74,7 +74,16 @@ async function run() {
    
     //services route
     app.get('/services', async(req,res)=>{
-        const cursor= servicesCollection.find();
+      const sort = req.query.sort;
+      const search=req.query.search;
+      console.log(search)
+    // const query={};
+    // const query= {price: {$gt:10, $lte:150   }   }
+    const query= {title: { $regex: search, $options: 'i' }  }
+      const options= {
+        sort: {"price": sort ==='asc' ? 1 : -1  }
+      }
+        const cursor= servicesCollection.find(query,options);
         const result= await cursor.toArray();
         res.send(result)
     } )
